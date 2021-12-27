@@ -10,7 +10,7 @@ public class Book {
     private List<String> genres;
     private double price;
     private int numberOfCopies;
-    private List<String> authors;
+    private List<Author> authors;
     private String coverPhoto;
     private double pricePerDay;
     private Date registrationDate;
@@ -27,7 +27,7 @@ public class Book {
         this.registrationDate = null;
     }
 
-    public Book(String russianName, String originalName, List<String> genres, double price, int numberOfCopies, List<String> authors, String coverPhoto, double pricePerDay, Date registrationDate) {
+    public Book(String russianName, String originalName, List<String> genres, double price, int numberOfCopies, List<Author> authors, String coverPhoto, double pricePerDay, Date registrationDate) {
         this.russianName = russianName;
         this.originalName = originalName;
         this.genres = genres;
@@ -79,11 +79,11 @@ public class Book {
         this.numberOfCopies = numberOfCopies;
     }
 
-    public List<String> getAuthors() {
+    public List<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<String> authors) {
+    public void setAuthors(List<Author> authors) {
         this.authors = authors;
     }
 
