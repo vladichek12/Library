@@ -13,8 +13,10 @@ public class DBWorker {
 
     public DBWorker()  {
         try {
+            Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(HOST,USERNAME,PASSWORD);
-        } catch (SQLException e) {
+            //connection = DriverManager.getConnection(HOST);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

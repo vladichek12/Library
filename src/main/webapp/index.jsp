@@ -25,12 +25,12 @@
     <input type = "submit" value="Accept books">
 </form>
 
-<form method = "post" action="bookList.jsp">
+<form method = "post" action="book-list_servlet">
     <input type = "submit" value="Show library books">
 </form>
 
 </form>
-<form method = "post" action="readerList.jsp">
+<form method = "post" action="reader-list_servlet">
     <input type = "submit" value="Show library readers">
 </form>
 </body>

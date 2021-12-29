@@ -3,8 +3,12 @@ package com.example.library.dbcontrollers;
 import com.example.library.classes.Reader;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static java.util.Objects.hash;
 
 public class DbReaderRepository implements ReaderRepository{
     @Override
@@ -19,7 +23,7 @@ public class DbReaderRepository implements ReaderRepository{
                 Reader reader = new Reader();
                 reader.setSurname(resultSet.getString(2));
                 reader.setName(resultSet.getString(3));
-                reader.setBirthday(resultSet.getDate(4));
+                reader.setBirthday((LocalDate.parse(resultSet.getString(4))));
                 reader.setEmail(resultSet.getString(5));
                 reader.setAddress(resultSet.getString(6));
                 readers.add(reader);
@@ -32,15 +36,18 @@ public class DbReaderRepository implements ReaderRepository{
 
     @Override
     public void add(Reader reader) {
+        Random random = new Random();
         DBWorker worker = new DBWorker();
         String query = "insert into readers (id,surname,name,birthday,email,address) values(?,?,?,?,?,?)";
         try {
             PreparedStatement statement = worker.getConnection().prepareStatement(query);
+            statement.setInt(1, hash(reader)/100);
             statement.setString(2, reader.getSurname());
             statement.setString(3, reader.getName());
-            statement.setDate(4, (Date) reader.getBirthday());
+            statement.setDate(4, Date.valueOf((reader.getBirthday())));
             statement.setString(5, reader.getEmail());
             statement.setString(6,reader.getAddress());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

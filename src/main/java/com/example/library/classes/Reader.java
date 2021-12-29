@@ -1,12 +1,13 @@
 package com.example.library.classes;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 public class Reader {
     private String surname;
     private String name;
-    private Date birthday;
+    private LocalDate birthday;
     private  String email;//unique
     private String address;
 
@@ -18,7 +19,7 @@ public class Reader {
         this.address = null;
     }
 
-    public Reader(String surname, String name, Date birthday, String email, String address) {
+    public Reader(String surname, String name, LocalDate birthday, String email, String address) {
         this.surname = surname;
         this.name = name;
         this.birthday = birthday;
@@ -42,11 +43,11 @@ public class Reader {
         this.name = name;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

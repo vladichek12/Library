@@ -1,8 +1,12 @@
 package com.example.library.dbcontrollers;
 
+import com.example.library.classes.Book;
+
+import java.util.List;
+
 public interface BookRepository {
-    public void findAll();
-    public void add();
-    public void lendBook();
-    public void acceptBook();
+    public List<Book> findAll();
+    public void add(Book book);
+    public void lendBook(Book book);
+    public void acceptBook(Book book);
 }

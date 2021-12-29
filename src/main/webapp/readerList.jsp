@@ -15,5 +15,7 @@
 <form method = "post" action="index.jsp">
     <input type = "submit" value="Tut budet norm logo">
 </form>
+
+<p>LIST: ${readers}</p>
 </body>
 </html>

@@ -2,6 +2,8 @@ package com.example.library;
 
 import com.example.library.classes.Book;
 import com.example.library.classes.Reader;
+import com.example.library.dbcontrollers.DbReaderRepository;
+import com.example.library.dbcontrollers.ReaderRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,10 +17,15 @@ import java.util.List;
 public class ReaderListServlet extends HttpServlet {
     private List<Reader> readers;
     public void init() {
-        //извлечь инфу про читателей
+        ReaderRepository repository = new DbReaderRepository();
+        readers = repository.findAll();
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("readers",readers);
+        request.getServletContext().getRequestDispatcher("/readerList.jsp").forward(request,response);
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("readers",readers);
         request.getServletContext().getRequestDispatcher("/readerList.jsp").forward(request,response);
     }

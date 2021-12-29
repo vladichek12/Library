@@ -12,6 +12,7 @@
 </head>
 <body>
 <h1><%= "BOOK LIST" %></h1>
+<p>LIST: ${books}</p>
 <form method = "post" action="index.jsp">
     <input type = "submit" value="Tut budet norm logo">
 </form>

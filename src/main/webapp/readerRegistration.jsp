@@ -17,7 +17,7 @@
     <input type = "submit" value="Tut budet norm logo">
 </form>
 
-<form action="bookRegistration.jsp" method="get">
+<form action="${pageContext.request.contextPath}/reader-registration_servlet" method="post">
     Reader surname: <input type = "text" name = "surname">
     <br />
     Reader name: <input type = "text" name = "name">

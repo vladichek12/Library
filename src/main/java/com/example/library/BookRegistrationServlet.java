@@ -20,6 +20,11 @@ public class BookRegistrationServlet extends HttpServlet {
        request.getServletContext().getRequestDispatcher("/bookRegistration.jsp").forward(request,response);
     }
 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("book",book);
+        request.getServletContext().getRequestDispatcher("/bookRegistration.jsp").forward(request,response);
+    }
+
     public void destroy() {
     }
 }
