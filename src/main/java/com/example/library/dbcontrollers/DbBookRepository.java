@@ -3,10 +3,13 @@ package com.example.library.dbcontrollers;
 import com.example.library.classes.Book;
 import com.example.library.classes.Reader;
 
+import javax.swing.*;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static java.sql.ResultSet.TYPE_SCROLL_INSENSITIVE;
 import static java.util.Objects.hash;
 
 
@@ -51,7 +54,7 @@ public class DbBookRepository implements BookRepository{
             String query = "insert into books (id,russianName,originalName,price,numberOfCopies,coverPhoto,priceperday,registrationdate) values(?,?,?,?,?,?,?,?)";
             PreparedStatement statement = worker.getConnection().prepareStatement(query);
             //statement.setInt(1,statement.g);
-            statement.setInt(1, hash(book)/100);
+            statement.setInt(1, book.hashCode()/100);
             statement.setString(2, book.getRussianName());
             statement.setString(3, book.getOriginalName());
             statement.setDouble(4, book.getPrice());
@@ -62,19 +65,25 @@ public class DbBookRepository implements BookRepository{
             statement.executeUpdate();
 
 
-            List<String> authors = book.getAuthors();//проверка есть ли такие авторы в базе данных
+            List<String> bookAuthors = book.getAuthors();//проверка есть ли такие авторы в базе данных
+            List<String> authors = new ArrayList<>(bookAuthors);
             List<Integer> ids = new ArrayList<>();
             String authorsSearchQuery = "select * from authors";
-            Statement statement1 = worker.getConnection().createStatement();
+            Statement statement1 = worker.getConnection().createStatement(TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
             ResultSet resultSet = statement1.executeQuery(authorsSearchQuery);
-            while(resultSet.next()){
-                for(String author : authors){
-                    if(author.equals(resultSet.getString(2))){
-                        authors.remove(author);
+            for(int i = 0; i < authors.size();i++){
+                resultSet.beforeFirst();
+                while (resultSet.next()) {
+                    if (authors.get(i).equals(resultSet.getString(2))) {
                         ids.add(resultSet.getInt(1));
+                        authors.remove(i);
+                        if(authors.size() == 0){
+                            break;
+                        }
                     }
                 }
             }
+
 
             String queryAuthorBooks = "insert into booksauthors (id,bookid,authorid) values (?,?,?)";
             String authorsAddQuery = "insert into authors (id,name,surname) values (?,?,null)";//запись новых авторов
@@ -83,8 +92,8 @@ public class DbBookRepository implements BookRepository{
             for(String author : authors){
                 statement2.setInt(1, hash(author)/100);
                 statement2.setString(2,author);
-                statement3.setInt(1,hash(book)/100 + hash(author)/100);
-                statement3.setInt(2,hash(book)/100);
+                statement3.setInt(1,book.hashCode()/100 + hash(author)/100);
+                statement3.setInt(2,book.hashCode()/100);
                 statement3.setInt(3,hash(author)/100);
                 statement2.executeUpdate();
                 statement3.executeUpdate();
@@ -92,9 +101,9 @@ public class DbBookRepository implements BookRepository{
                 //bookAuthorId++;
             }
             for(Integer id : ids){
-                statement3.setInt(1,hash(book)/100 + hash(id)/100);
-                statement3.setInt(2,hash(book)/100);
-                statement3.setInt(3,hash(id)/100);
+                statement3.setInt(1,book.hashCode()/100 + id);
+                statement3.setInt(2,book.hashCode()/100);
+                statement3.setInt(3,id);
                 statement3.executeUpdate();
                 //authorId++;
                // bookAuthorId++;
@@ -119,8 +128,8 @@ public class DbBookRepository implements BookRepository{
             String bookGenresQuery = "insert into booksgenres(id,bookid,genreid) values (?,?,?)";
             PreparedStatement statement5 = worker.getConnection().prepareStatement(bookGenresQuery);
             for(Integer id : genreIds){
-                statement5.setInt(1,hash(book)/100 + hash(id)/100);
-                statement5.setInt(2,hash(book)/100);
+                statement5.setInt(1,book.hashCode()/100 + id*13);
+                statement5.setInt(2,book.hashCode()/100);
                 statement5.setInt(3,id);
                 statement5.executeUpdate();
             }

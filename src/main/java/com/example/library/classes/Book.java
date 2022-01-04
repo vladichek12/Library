@@ -3,12 +3,11 @@ package com.example.library.classes;
 
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Book {
+    private static int count = 0;
+    private int id;
     private String russianName;
     private String originalName;
     private List<String> genres;
@@ -20,6 +19,7 @@ public class Book {
     private LocalDate registrationDate;
 
     public Book() {
+        this.id = ++count;
         this.russianName = new String("windows-1251");
         this.originalName = null;
         this.genres = null;
@@ -32,6 +32,7 @@ public class Book {
     }
 
     public Book(String russianName, String originalName, List<String> genres, double price, int numberOfCopies, List<String> authors, String coverPhoto, double pricePerDay, LocalDate registrationDate) {
+        this.id = ++count;
         this.russianName = russianName;
         this.originalName = originalName;
         this.genres = genres;
@@ -41,6 +42,10 @@ public class Book {
         this.coverPhoto = coverPhoto;
         this.pricePerDay = pricePerDay;
         this.registrationDate = registrationDate;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getRussianName() {
@@ -88,7 +93,12 @@ public class Book {
     }
 
     public void setAuthors(String authors) {
-        this.authors = Arrays.asList(authors.split("\n"));
+        if(authors.contains("\n")) {
+            this.authors = Arrays.asList(authors.split("\r\n"));
+        }
+        else{
+            this.authors = Collections.singletonList(authors);
+        }
     }
 
     public String getCoverPhoto() {
