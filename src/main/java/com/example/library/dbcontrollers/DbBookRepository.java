@@ -3,13 +3,17 @@ package com.example.library.dbcontrollers;
 import com.example.library.classes.Book;
 import com.example.library.classes.Reader;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.hash;
+
+
 
 public class DbBookRepository implements BookRepository{
+
+
     @Override
     public List<Book> findAll() {
         List<Book> books = new ArrayList<>();
@@ -26,7 +30,7 @@ public class DbBookRepository implements BookRepository{
                 book.setNumberOfCopies(resultSet.getInt(5));
                 book.setCoverPhoto(resultSet.getString(6));
                 book.setPricePerDay(resultSet.getDouble(7));
-                book.setRegistrationDate(resultSet.getDate(8));
+                book.setRegistrationDate(LocalDate.parse(resultSet.getString(8)));
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -37,7 +41,96 @@ public class DbBookRepository implements BookRepository{
 
     @Override
     public void add(Book book) {
+        DBWorker worker = new DBWorker();
 
+
+        try {
+
+
+            //запись информации о книге
+            String query = "insert into books (id,russianName,originalName,price,numberOfCopies,coverPhoto,priceperday,registrationdate) values(?,?,?,?,?,?,?,?)";
+            PreparedStatement statement = worker.getConnection().prepareStatement(query);
+            //statement.setInt(1,statement.g);
+            statement.setInt(1, hash(book)/100);
+            statement.setString(2, book.getRussianName());
+            statement.setString(3, book.getOriginalName());
+            statement.setDouble(4, book.getPrice());
+            statement.setInt(5, book.getNumberOfCopies());
+            statement.setString(6,book.getCoverPhoto());
+            statement.setDouble(7,book.getPricePerDay());
+            statement.setDate(8, Date.valueOf(book.getRegistrationDate()));
+            statement.executeUpdate();
+
+
+            List<String> authors = book.getAuthors();//проверка есть ли такие авторы в базе данных
+            List<Integer> ids = new ArrayList<>();
+            String authorsSearchQuery = "select * from authors";
+            Statement statement1 = worker.getConnection().createStatement();
+            ResultSet resultSet = statement1.executeQuery(authorsSearchQuery);
+            while(resultSet.next()){
+                for(String author : authors){
+                    if(author.equals(resultSet.getString(2))){
+                        authors.remove(author);
+                        ids.add(resultSet.getInt(1));
+                    }
+                }
+            }
+
+            String queryAuthorBooks = "insert into booksauthors (id,bookid,authorid) values (?,?,?)";
+            String authorsAddQuery = "insert into authors (id,name,surname) values (?,?,null)";//запись новых авторов
+            PreparedStatement statement2 = worker.getConnection().prepareStatement(authorsAddQuery);
+            PreparedStatement statement3 = worker.getConnection().prepareStatement(queryAuthorBooks);
+            for(String author : authors){
+                statement2.setInt(1, hash(author)/100);
+                statement2.setString(2,author);
+                statement3.setInt(1,hash(book)/100 + hash(author)/100);
+                statement3.setInt(2,hash(book)/100);
+                statement3.setInt(3,hash(author)/100);
+                statement2.executeUpdate();
+                statement3.executeUpdate();
+                //authorId++;
+                //bookAuthorId++;
+            }
+            for(Integer id : ids){
+                statement3.setInt(1,hash(book)/100 + hash(id)/100);
+                statement3.setInt(2,hash(book)/100);
+                statement3.setInt(3,hash(id)/100);
+                statement3.executeUpdate();
+                //authorId++;
+               // bookAuthorId++;
+            }
+            //statement2.executeUpdate();
+           // statement3.executeUpdate();
+
+
+
+            //связь книги с жанрами
+            String retrieveGenresIdQuery = "select * from genres";
+            ArrayList<Integer> genreIds = new ArrayList<>();
+            Statement statement4 = worker.getConnection().createStatement();
+            ResultSet resultSet4 = statement4.executeQuery(retrieveGenresIdQuery);
+            while(resultSet4.next()){
+                for(String genre : book.getGenres()){
+                    if(genre.equals(resultSet4.getString(2))){
+                        genreIds.add(resultSet4.getInt(1));
+                    }
+                }
+            }
+            String bookGenresQuery = "insert into booksgenres(id,bookid,genreid) values (?,?,?)";
+            PreparedStatement statement5 = worker.getConnection().prepareStatement(bookGenresQuery);
+            for(Integer id : genreIds){
+                statement5.setInt(1,hash(book)/100 + hash(id)/100);
+                statement5.setInt(2,hash(book)/100);
+                statement5.setInt(3,id);
+                statement5.executeUpdate();
+            }
+
+
+
+            //bookId++;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

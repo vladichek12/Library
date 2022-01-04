@@ -1,5 +1,9 @@
 package com.example.library.classes;
 
+
+
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -10,13 +14,13 @@ public class Book {
     private List<String> genres;
     private double price;
     private int numberOfCopies;
-    private List<Author> authors;
+    private List<String> authors;
     private String coverPhoto;
     private double pricePerDay;
-    private Date registrationDate;
+    private LocalDate registrationDate;
 
     public Book() {
-        this.russianName = null;
+        this.russianName = new String("windows-1251");
         this.originalName = null;
         this.genres = null;
         this.price = 0;
@@ -27,7 +31,7 @@ public class Book {
         this.registrationDate = null;
     }
 
-    public Book(String russianName, String originalName, List<String> genres, double price, int numberOfCopies, List<Author> authors, String coverPhoto, double pricePerDay, Date registrationDate) {
+    public Book(String russianName, String originalName, List<String> genres, double price, int numberOfCopies, List<String> authors, String coverPhoto, double pricePerDay, LocalDate registrationDate) {
         this.russianName = russianName;
         this.originalName = originalName;
         this.genres = genres;
@@ -79,12 +83,12 @@ public class Book {
         this.numberOfCopies = numberOfCopies;
     }
 
-    public List<Author> getAuthors() {
+    public List<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public void setAuthors(String authors) {
+        this.authors = Arrays.asList(authors.split("\n"));
     }
 
     public String getCoverPhoto() {
@@ -103,11 +107,11 @@ public class Book {
         this.pricePerDay = pricePerDay;
     }
 
-    public Date getRegistrationDate() {
+    public LocalDate getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
     }
 
