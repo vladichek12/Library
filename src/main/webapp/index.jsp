@@ -17,7 +17,7 @@
     <input type = "submit" value="Reg. new reader">
 </form>
 
-<form method = "post" action="bookLending.jsp">
+<form method = "get" action="book-lending_servlet">
     <input type = "submit" value="Lend books">
 </form>
 

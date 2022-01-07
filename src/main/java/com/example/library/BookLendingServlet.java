@@ -2,6 +2,8 @@ package com.example.library;
 
 import com.example.library.classes.Book;
 import com.example.library.classes.Reader;
+import com.example.library.dbcontrollers.BookRepository;
+import com.example.library.dbcontrollers.DbBookRepository;
 import com.example.library.dbcontrollers.DbReaderRepository;
 import com.example.library.dbcontrollers.ReaderRepository;
 
@@ -23,8 +25,10 @@ public class BookLendingServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        BookRepository repository = new DbBookRepository();
+        lendingBooks = repository.findAll();
         request.setAttribute("lendingBooks",lendingBooks);
-        request.getServletContext().getRequestDispatcher("/BookLending.jsp").forward(request,response);
+        request.getServletContext().getRequestDispatcher("/bookLending.jsp").forward(request,response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -39,6 +43,14 @@ public class BookLendingServlet extends HttpServlet {
             repository.add(reader);
         }
         else{
+            if(repository.isDebtor(reader)){
+                //ne vidat knigu
+            }
+            else{
+                //vidacha knig
+
+
+            }
         }
 
     }

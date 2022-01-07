@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: HOME
@@ -28,8 +29,13 @@
     <br />
     Reader address: <input type = "text" name = "address">
     <br />
-    <p>input books names</p>
-    <textarea name = "books">Master and Margarita...</textarea>
+    <p>choose books</p>
+
+    <select id = "books" multiple = "multiple" name = "booksItems">
+        <c:forEach var ="element" items = "${lendingBooks}">
+            <option value = ${element.getOriginalName()}>${element.getOriginalName()}</option>
+        </c:forEach>
+    </select>
     <br>
     <input type = "submit" value = "Submit" />
 </form>
