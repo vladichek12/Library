@@ -54,4 +54,38 @@ public class DbReaderRepository implements ReaderRepository{
 
 
     }
+
+    @Override
+    public boolean isRegisteredReader(Reader reader) {
+        List<Reader> readers= findAll();
+        for(Reader tempReader : readers){
+            if(reader.equals(tempReader))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isDebtor(Reader reader) {
+        DBWorker worker = new DBWorker();
+        String query = "select id from readers where email like ?";
+        try {
+            PreparedStatement preparedStatement = worker.getConnection().prepareStatement(query);
+            preparedStatement.setString(1,"'" + reader.getEmail() + "'");
+            ResultSet resultSet = preparedStatement.getResultSet();
+            int readerId = resultSet.getInt(1);
+            query = "select * from bookcopies where readerid = ?";
+            preparedStatement = worker.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1,readerId);
+            resultSet = preparedStatement.getResultSet();
+            if(resultSet.next()){
+                return true;
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
