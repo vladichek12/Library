@@ -33,7 +33,7 @@
 
     <select id = "books" multiple = "multiple" name = "booksItems">
         <c:forEach var ="element" items = "${lendingBooks}">
-            <option value = ${element.getOriginalName()}>${element.getOriginalName()}</option>
+            <option value = ${element.getId()}>${element.getOriginalName()}</option>
         </c:forEach>
     </select>
     <br>

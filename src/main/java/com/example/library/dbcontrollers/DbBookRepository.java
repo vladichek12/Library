@@ -27,6 +27,7 @@ public class DbBookRepository implements BookRepository{
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()){
                 Book book = new Book();
+                book.setId(resultSet.getLong(1));
                 book.setRussianName(resultSet.getString(2));
                 book.setOriginalName(resultSet.getString(3));
                 book.setPrice(resultSet.getDouble(4));

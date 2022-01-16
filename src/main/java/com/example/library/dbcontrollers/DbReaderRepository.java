@@ -107,21 +107,25 @@ public class DbReaderRepository implements ReaderRepository{
         Statement statement  = worker.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(query);
 
-        for(String book : books){//найти книги которые выдать юзеру
-            while (resultSet.next()){
-                if(resultSet.getString(3).equals(book) && resultSet.getInt(5)>0)
-                ids.add(resultSet.getInt(1));
-                numberOfCopies.add(resultSet.getInt(5));
+        while (resultSet.next()){
+            for(String book : books){//найти книги которые выдать юзеру
+                if((resultSet.getLong(1)) == Long.parseLong(book)&& resultSet.getInt(5)>0) {
+                    ids.add(resultSet.getInt(1));
+                    numberOfCopies.add(resultSet.getInt(5));
+                }
             }
         }
-        for(int i:numberOfCopies){
-            i--;
-        }
+      /*  for(int i = 0;i < numberOfCopies.size();i++){
+            int a = numberOfCopies.get(i);
+            a--;
+            numberOfCopies.add(i,a);
+            numberOfCopies[i]--;
+        }*/
         String updateQuery = "update books set numberOfCopies = ? where id = ?";
         PreparedStatement updatePreparedStatement = worker.getConnection().prepareStatement(updateQuery);
         for(int i = 0;i < ids.size();i++){
             updatePreparedStatement.setInt(1,ids.get(i));
-            updatePreparedStatement.setInt(2,numberOfCopies.get(i));
+            updatePreparedStatement.setInt(2,numberOfCopies.get(i)-1);
             updatePreparedStatement.executeUpdate();
         }
 
@@ -137,8 +141,8 @@ public class DbReaderRepository implements ReaderRepository{
            }
 
         //записать что книги выданы
-            LocalDate date = LocalDate.now();
-            date.plusMonths(1);
+            LocalDate date = LocalDate.now().plusMonths(1);
+
             String query1 = "insert into bookCopies(id,bookid,readerid,condition,discountSize,returnDate) values (?,?,?,1,?,?)";
             PreparedStatement preparedStatement1 = worker.getConnection().prepareStatement(query1);
            for(int i :ids){
