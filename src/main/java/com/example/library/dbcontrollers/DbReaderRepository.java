@@ -1,5 +1,6 @@
 package com.example.library.dbcontrollers;
 
+import com.example.library.classes.Book;
 import com.example.library.classes.Reader;
 
 import java.sql.*;
@@ -68,10 +69,10 @@ public class DbReaderRepository implements ReaderRepository{
     @Override
     public boolean isDebtor(Reader reader) {
         DBWorker worker = new DBWorker();
-        String query = "select id from readers where email like ?";
+        String query = "select id from readers where email = ?";
         try {
             PreparedStatement preparedStatement = worker.getConnection().prepareStatement(query);
-            preparedStatement.setString(1,"'" + reader.getEmail() + "'");
+            preparedStatement.setString(1, reader.getEmail());
             ResultSet resultSet = preparedStatement.getResultSet();
             int readerId = resultSet.getInt(1);
             query = "select * from bookcopies where readerid = ?";
@@ -87,5 +88,77 @@ public class DbReaderRepository implements ReaderRepository{
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public void lendBook(List<String> books,Reader reader) {
+        Double discountSize = 1.;
+        if(books.size()>2){
+            discountSize = 0.9;
+        }
+        else if(books.size()>5){
+            discountSize= 0.85;
+        }
+        DBWorker worker = new DBWorker();
+        try {
+        List<Integer> ids = new ArrayList<>();
+        List<Integer> numberOfCopies = new ArrayList<>();
+        String query = "select * from books";
+        Statement statement  = worker.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+
+        for(String book : books){//найти книги которые выдать юзеру
+            while (resultSet.next()){
+                if(resultSet.getString(3).equals(book) && resultSet.getInt(5)>0)
+                ids.add(resultSet.getInt(1));
+                numberOfCopies.add(resultSet.getInt(5));
+            }
+        }
+        for(int i:numberOfCopies){
+            i--;
+        }
+        String updateQuery = "update books set numberOfCopies = ? where id = ?";
+        PreparedStatement updatePreparedStatement = worker.getConnection().prepareStatement(updateQuery);
+        for(int i = 0;i < ids.size();i++){
+            updatePreparedStatement.setInt(1,ids.get(i));
+            updatePreparedStatement.setInt(2,numberOfCopies.get(i));
+            updatePreparedStatement.executeUpdate();
+        }
+
+
+        //найти ридера
+            int readerId = 0;
+            String query2 = "select * from readers";
+            Statement statement2  = worker.getConnection().createStatement();
+            ResultSet resultSet2 = statement2.executeQuery(query2);
+           while (resultSet2.next()){
+               if(resultSet2.getString(5).equals(reader.getEmail()))
+               readerId = resultSet2.getInt(1);
+           }
+
+        //записать что книги выданы
+            LocalDate date = LocalDate.now();
+            date.plusMonths(1);
+            String query1 = "insert into bookCopies(id,bookid,readerid,condition,discountSize,returnDate) values (?,?,?,1,?,?)";
+            PreparedStatement preparedStatement1 = worker.getConnection().prepareStatement(query1);
+           for(int i :ids){
+               preparedStatement1.setInt(1, i + readerId);
+               preparedStatement1.setInt(2,i);
+               preparedStatement1.setInt(3,readerId);
+               preparedStatement1.setDouble(4,discountSize);
+               preparedStatement1.setDate(5, Date.valueOf(date));
+               preparedStatement1.executeUpdate();
+           }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void acceptBook(Book book) {
+
     }
 }

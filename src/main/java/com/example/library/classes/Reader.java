@@ -2,6 +2,7 @@ package com.example.library.classes;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Reader {
@@ -10,6 +11,7 @@ public class Reader {
     private LocalDate birthday;
     private  String email;//unique
     private String address;
+    private List<Book> books;
 
     public Reader() {
         this.surname = null;
@@ -65,6 +67,14 @@ public class Reader {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     @Override

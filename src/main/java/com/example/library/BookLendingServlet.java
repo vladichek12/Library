@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "BookLendingServlet", value = "/book-lending_servlet")
@@ -39,19 +40,17 @@ public class BookLendingServlet extends HttpServlet {
         reader.setEmail(request.getParameter("email"));
         reader.setAddress(request.getParameter("address"));
         reader.setBirthday(LocalDate.parse(request.getParameter("birthday")));
+        List<String> books = Arrays.asList(request.getParameterValues("booksItems"));
         if(!repository.isRegisteredReader(reader)){
             repository.add(reader);
         }
-        else{
-            if(repository.isDebtor(reader)){
-                //ne vidat knigu
-            }
-            else{
-                //vidacha knig
-
-
-            }
+        else if(repository.isDebtor(reader)){
+            //ne vidat knigu
+            //сообщение и редирект
         }
+       repository.lendBook(books,reader);
+        request.getServletContext().getRequestDispatcher("/bookLending.jsp").forward(request,response);
+
 
     }
 

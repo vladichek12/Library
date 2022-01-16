@@ -49,7 +49,6 @@ public class DbBookRepository implements BookRepository{
 
         try {
 
-
             //запись информации о книге
             String query = "insert into books (id,russianName,originalName,price,numberOfCopies,coverPhoto,priceperday,registrationdate) values(?,?,?,?,?,?,?,?)";
             PreparedStatement statement = worker.getConnection().prepareStatement(query);
@@ -142,13 +141,4 @@ public class DbBookRepository implements BookRepository{
         }
     }
 
-    @Override
-    public void lendBook(Book book) {
-
-    }
-
-    @Override
-    public void acceptBook(Book book) {
-
-    }
 }
