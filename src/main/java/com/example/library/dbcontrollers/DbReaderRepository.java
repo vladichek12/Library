@@ -165,4 +165,36 @@ public class DbReaderRepository implements ReaderRepository{
     public void acceptBook(Book book) {
 
     }
+
+    @Override
+    public List<String> findBooksByReader(Reader reader) {
+        DBWorker worker = new DBWorker();
+        int readerId = 0;
+        String query2 = "select * from readers";
+        Statement statement2 = null;
+        try {
+            statement2 = worker.getConnection().createStatement();
+            ResultSet resultSet2 = statement2.executeQuery(query2);
+            while (resultSet2.next()) {
+                if (resultSet2.getString(5).equals(reader.getEmail()))
+                    readerId = resultSet2.getInt(1);
+            }
+
+            String query = "select originalname from books inner join bookcopies on books.id = bookcopies.bookid and bookcopies.readerid = "
+                    + String.valueOf(readerId) + " and bookcopies.delete = false" ;
+            Statement statement = worker.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            List<String> result = new ArrayList<>();
+            while (resultSet.next()){
+                result.add(resultSet.getString(1));
+            }
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
 }

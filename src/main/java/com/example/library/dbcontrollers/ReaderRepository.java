@@ -12,4 +12,5 @@ public interface ReaderRepository {
     public boolean isDebtor(Reader reader);
     public void lendBook(List<String> books,Reader reader);
     public void acceptBook(Book book);
+    public List<String> findBooksByReader(Reader reader);
 }

@@ -21,7 +21,7 @@
     <input type = "submit" value="Lend books">
 </form>
 
-<form method = "post" action="bookAcceptance.jsp">
+<form method = "get" action="bookAcceptance.jsp">
     <input type = "submit" value="Accept books">
 </form>
 

@@ -2,25 +2,44 @@ package com.example.library;
 
 
 import com.example.library.classes.Book;
+import com.example.library.classes.Reader;
+import com.example.library.dbcontrollers.DbReaderRepository;
+import com.example.library.dbcontrollers.ReaderRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "BookAcceptanceServlet", value = "/book-acceptance_servlet")
-public class BookAcceptanceServlet {
-    private List<Book> acceptanceBooks;
+public class BookAcceptanceServlet extends HttpServlet {
+    private ReaderRepository repository;
 
     public void init() {
-        //извлечь инфу про книги
+        repository = new DbReaderRepository();
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("acceptanceBooks",acceptanceBooks);
-        request.getServletContext().getRequestDispatcher("/BookAcceptance.jsp").forward(request,response);
+
+    }
+
+    public void doPost(HttpServletRequest request,HttpServletResponse response){
+        Reader reader = new Reader();
+        reader.setName(request.getParameter("name"));
+        reader.setSurname(request.getParameter("surname"));
+        reader.setEmail(request.getParameter("email"));
+        reader.setAddress(request.getParameter("address"));
+        reader.setBirthday(LocalDate.parse(request.getParameter("birthday")));
+        if(repository.isRegisteredReader(reader)){
+            List<String> books = repository.findBooksByReader(reader);
+        }
+        else{
+            //error message
+        }
     }
 
     public void destroy() {
