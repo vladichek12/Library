@@ -17,6 +17,7 @@ public class Book {
     private String coverPhoto;
     private double pricePerDay;
     private LocalDate registrationDate;
+    private int mark;
 
     public Book() {
         this.russianName = new String("windows-1251");
@@ -126,6 +127,14 @@ public class Book {
 
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public int getMark() {
+        return mark;
+    }
+
+    public void setMark(int mark) {
+        this.mark = mark;
     }
 
     @Override

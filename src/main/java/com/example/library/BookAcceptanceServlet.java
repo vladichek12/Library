@@ -27,7 +27,7 @@ public class BookAcceptanceServlet extends HttpServlet {
 
     }
 
-    public void doPost(HttpServletRequest request,HttpServletResponse response){
+    public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
         Reader reader = new Reader();
         reader.setName(request.getParameter("name"));
         reader.setSurname(request.getParameter("surname"));
@@ -35,7 +35,10 @@ public class BookAcceptanceServlet extends HttpServlet {
         reader.setAddress(request.getParameter("address"));
         reader.setBirthday(LocalDate.parse(request.getParameter("birthday")));
         if(repository.isRegisteredReader(reader)){
-            List<String> books = repository.findBooksByReader(reader);
+            List<Book> books = repository.findBooksByReader(reader);
+            request.setAttribute("books",books);
+            request.setAttribute("reader", reader);
+            request.getServletContext().getRequestDispatcher("/bookReturn.jsp").forward(request,response);
         }
         else{
             //error message

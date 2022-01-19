@@ -142,4 +142,31 @@ public class DbBookRepository implements BookRepository{
         }
     }
 
+    @Override
+    public List<Book> findById(List<String> ids) {
+        List<Book> books = new ArrayList<>();
+        DBWorker worker = new DBWorker();
+        String query = "select * from books";
+        try {
+            Statement statement  = worker.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()){
+                Book book = new Book();
+                book.setId(resultSet.getLong(1));
+                book.setRussianName(resultSet.getString(2));
+                book.setOriginalName(resultSet.getString(3));
+                book.setPrice(resultSet.getDouble(4));
+                book.setNumberOfCopies(resultSet.getInt(5));
+                book.setCoverPhoto(resultSet.getString(6));
+                book.setPricePerDay(resultSet.getDouble(7));
+                book.setRegistrationDate(LocalDate.parse(resultSet.getString(8)));
+                if(ids.contains(book.getId()))
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
 }
