@@ -22,7 +22,7 @@ public class Book {
     public Book() {
         this.russianName = new String("windows-1251");
         this.originalName = null;
-        this.genres = null;
+        this.genres = new ArrayList<>();
         this.price = 0;
         this.numberOfCopies = 0;
         this.authors = null;
@@ -73,7 +73,7 @@ public class Book {
     }
 
     public void setGenres(List<String> genres) {
-        this.genres = genres;
+        this.genres.addAll(genres);
     }
 
     public double getPrice() {

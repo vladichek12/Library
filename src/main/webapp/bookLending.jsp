@@ -25,7 +25,7 @@
     <br />
     Reader birthday: <input type = "date" name = "birthday">
     <br />
-    Reader email: <input type = "text" name = "email">
+    Reader email: <input type = "email" name = "email">
     <br />
     Reader address: <input type = "text" name = "address">
     <br />

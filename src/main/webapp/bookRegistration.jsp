@@ -9,22 +9,26 @@
 <html>
 <head>
     <title>Library</title>
+    <link rel="stylesheet" href="css/bookRegistration.css">
 </head>
-<body>
 
-<h1><%= "BOOK REGISTRATION" %></h1>
-<form method = "post" action="index.jsp">
-    <input class="flex-box" type = "submit" value="Tut budet norm logo">
-</form>
+<div class="logo" >
+    <a href="book-list_servlet" ><img src="img/nE0DllVj_m.jpg"></a>
+</div>
+<div class="title">
+    <h2>Book registration</h2>
+</div>
 
+<div class="registrationForm">
 <form action="book-registration_servlet" method="post">
-    Book title in russian: <input type = "text" name = "russianName">
-    <br />
-    Book original title: <input type = "text" name = "originalName">
-    <br />
-<%--    Book genres: <input type = "text" name = "genres">--%>
-    Book genres:
-    <select name="genres" size = "5" multiple = "multiple" >
+    <p>Book title in russian:</p>
+    <input type = "text" name = "russianName" class="row">
+
+    <p>Book original title:</p>
+    <input type = "text" name = "originalName" class="row">
+
+    <p>Book genres:</p>
+    <select name="genres" size = "5" multiple = "multiple" class="row">
         <option disabled>choose genres </option>
         <option value="Crime">Crime</option>
         <option value="Detective">Detective</option>
@@ -48,20 +52,25 @@
         <option value="Dictionary">Dictionary</option>
         <option value="Cookbook">Cookbook</option>
     </select>
-    <br />
-    Book price: <input type = "number" step="0.01" name = "price">
-    <br />
-    Book number of copies: <input type = "number" name = "numberOfCopies">
-    <br />
-    Book authors:
-<%--    <input type = "text" name = "authors">--%>
-    <textarea name ="authors">Input authors</textarea>
-    <br />
-    Book cover photo: <input type = "text" name = "coverPhoto">
-    <br />
-    Book price per day: <input type = "number" step="0.01" name = "pricePerDay">
-    <br />
-    <input type = "submit" value = "Submit" />
+
+    <p>Book price:</p>
+    <input type = "number" step="0.01" name = "price" min="0" class="row">
+
+    <p>Book number of copies:</p>
+    <input type = "number" name = "numberOfCopies" min="0" class="row">
+
+    <p>Book authors:</p>
+    <textarea name ="authors" class="row">Input authors</textarea>
+
+    <p>Book cover photo:</p>
+    <input type = "text" name = "coverPhoto" class="row">
+
+    <p>Book price per day:</p>
+    <input type = "number" step="0.01" name = "pricePerDay" min="0" class="row">
+
+    <br>
+    <input type = "submit" value = "Submit" class="submitButton"/>
 </form>
+</div>
 </body>
 </html>

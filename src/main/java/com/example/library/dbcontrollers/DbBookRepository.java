@@ -37,10 +37,24 @@ public class DbBookRepository implements BookRepository{
                 book.setRegistrationDate(LocalDate.parse(resultSet.getString(8)));
                 books.add(book);
             }
+
+            for(int i =0;i<books.size();i++){
+                query = "select genrename from genres inner join booksgenres " +
+                        "on genres.id = booksgenres.genreid and booksgenres.bookid = " + String.valueOf(books.get(i).getId());
+                Statement statement1 = worker.getConnection().createStatement();
+                ResultSet resultSet1 = statement1.executeQuery(query);
+                List<String> genres = new ArrayList<>();
+                while (resultSet1.next()){
+                    genres.add(resultSet1.getString(1));
+                }
+                books.get(i).setGenres(genres);
+                genres.clear();
+            }
+            return books;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return books;
+       return null;
     }
 
     @Override

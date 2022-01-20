@@ -16,17 +16,18 @@ public class BookListServlet extends HttpServlet {
     private List<Book> books;
     public void init() {
         //извлечь инфу про книги
-        DbBookRepository repository = new DbBookRepository();
-        books = repository.findAll();
+
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        DbBookRepository repository = new DbBookRepository();
+        books = repository.findAll();
         request.setAttribute("books",books);
-        request.getServletContext().getRequestDispatcher("/bookList.jsp").forward(request,response);
+        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request,response);
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("books",books);
-        request.getServletContext().getRequestDispatcher("/bookList.jsp").forward(request,response);
+        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request,response);
     }
 
     public void destroy() {

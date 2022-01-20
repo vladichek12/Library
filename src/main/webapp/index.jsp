@@ -1,37 +1,50 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Library</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-<h1><%= "LIBRARY LOGO" %>
-</h1>
-<br/>
-<div></div>
-<form method = "post" action="bookRegistration.jsp">
-    <input type = "submit" value="Reg. new book">
-</form>
+<div class="logo" >
+    <a href="book-list_servlet" ><img src="img/nE0DllVj_m.jpg"></a>
+</div>
+<div class="nav">
+    <nav>
+        <ul>
+            <li><a href="bookRegistration.jsp" class="button">Register a new book</a></li>
+            <li><a href="readerRegistration.jsp" class="button">Register a new reader</a></li>
+            <li><a href="book-lending_servlet" class="button">Lend books</a></li>
+            <li><a href="bookAcceptance.jsp" class="button">Accept books</a></li>
+        </ul>
+    </nav>
+</div>
 
-<form method = "post" action="readerRegistration.jsp">
-    <input type = "submit" value="Reg. new reader">
-</form>
+<hr>
 
-<form method = "get" action="book-lending_servlet">
-    <input type = "submit" value="Lend books">
-</form>
+<div class="books">
+    <table>
+        <tr>
+            <td>Russian title</td>
+            <td>Genres</td>
+            <td>Registration date</td>
+            <td>Number of available copies</td>
+        </tr>
+        <c:forEach var ="element" items = "${books}">
+            <tr>
+                <td>${element.getRussianName()}</td>
+                <td>
+                    <c:forEach var="genre" items="${element.getGenres()}">
+                        <p>${genre}</p>
+                    </c:forEach>
+                </td>
+                <td>${element.getRegistrationDate()}</td>
+                <td>${element.getNumberOfCopies()}</td>
+            </tr>
+        </c:forEach>
+    </table>
 
-<form method = "get" action="bookAcceptance.jsp">
-    <input type = "submit" value="Accept books">
-</form>
-
-<form method = "post" action="book-list_servlet">
-    <input type = "submit" value="Show library books">
-</form>
-
-</form>
-<form method = "post" action="reader-list_servlet">
-    <input type = "submit" value="Show library readers">
-</form>
+</div>
 </body>
 </html>
