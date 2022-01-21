@@ -12,24 +12,32 @@
     <title>Library</title>
 </head>
 <body>
-<h1><%= "BOOK ACCEPTANCE" %></h1>
-<form method = "post" action="index.jsp">
-    <input type = "submit" value="Tut budet norm logo">
-</form>
+<div class="logo" >
+    <a href="book-list_servlet" ><img src="img/nE0DllVj_m.jpg"></a>
+    <link rel="stylesheet" href="css/bookRegistration.css">
+</div>
+<div class="title">
+    <h2>Book acceptance</h2>
+</div>
 
-<form method="post" action="book-acceptance_servlet">
-    Reader surname: <input type = "text" name = "surname">
-    <br />
-    Reader name: <input type = "text" name = "name">
-    <br />
-    Reader birthday: <input type = "date" name = "birthday">
-    <br />
-    Reader email: <input type = "email" name = "email" >
-    <br />
-    Reader address: <input type = "text" name = "address">
-    <br />
+<form action="${pageContext.request.contextPath}/book-acceptance_servlet" method="post" class="registrationForm">
+    <p>Reader surname:</p>
+    <input type = "text" name = "surname" required>
 
-    <input type = "submit" value = "Submit" />
+    <p>Reader name:</p>
+    <input type = "text" name = "name" required>
+
+    <p>Reader birthday:</p>
+    <input type = "date" name = "birthday" required>
+
+    <p>Reader email:</p>
+    <input type = "email" name = "email" required>
+
+    <p>Reader address:</p>
+    <input type = "text" name = "address" required>
+
+    <br />
+    <input type = "submit" value = "Submit"  class = "submitButton"/>
 </form>
 
 </body>

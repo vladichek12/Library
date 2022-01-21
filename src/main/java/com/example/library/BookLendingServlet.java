@@ -45,11 +45,10 @@ public class BookLendingServlet extends HttpServlet {
             repository.add(reader);
         }
         else if(repository.isDebtor(reader)){
-            //ne vidat knigu
-            //сообщение и редирект
+            request.getServletContext().getRequestDispatcher("/debtorMessage.jsp").forward(request,response);
         }
-       repository.lendBook(books,reader);
-        request.getServletContext().getRequestDispatcher("/bookLending.jsp").forward(request,response);
+        repository.lendBook(books,reader);
+        request.getServletContext().getRequestDispatcher("/book-list_servlet").forward(request,response);
 
 
     }

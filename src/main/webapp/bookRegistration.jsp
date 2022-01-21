@@ -22,13 +22,13 @@
 <div class="registrationForm">
 <form action="book-registration_servlet" method="post">
     <p>Book title in russian:</p>
-    <input type = "text" name = "russianName" class="row">
+    <input type = "text" name = "russianName" class="row" required>
 
     <p>Book original title:</p>
-    <input type = "text" name = "originalName" class="row">
+    <input type = "text" name = "originalName" class="row" required>
 
     <p>Book genres:</p>
-    <select name="genres" size = "5" multiple = "multiple" class="row">
+    <select name="genres" size = "5" multiple = "multiple" class="row" required>
         <option disabled>choose genres </option>
         <option value="Crime">Crime</option>
         <option value="Detective">Detective</option>
@@ -54,19 +54,19 @@
     </select>
 
     <p>Book price:</p>
-    <input type = "number" step="0.01" name = "price" min="0" class="row">
+    <input type = "number" step="0.01" name = "price" min="0" class="row" required>
 
     <p>Book number of copies:</p>
-    <input type = "number" name = "numberOfCopies" min="0" class="row">
+    <input type = "number" name = "numberOfCopies" min="0" class="row" required>
 
     <p>Book authors:</p>
-    <textarea name ="authors" class="row">Input authors</textarea>
+    <textarea name ="authors" class="row" required>Input authors</textarea>
 
     <p>Book cover photo:</p>
-    <input type = "text" name = "coverPhoto" class="row">
+    <input type = "text" name = "coverPhoto" class="row" required>
 
     <p>Book price per day:</p>
-    <input type = "number" step="0.01" name = "pricePerDay" min="0" class="row">
+    <input type = "number" step="0.01" name = "pricePerDay" min="0" class="row" required>
 
     <br>
     <input type = "submit" value = "Submit" class="submitButton"/>

@@ -15,7 +15,6 @@ import java.util.List;
 public class BookListServlet extends HttpServlet {
     private List<Book> books;
     public void init() {
-        //извлечь инфу про книги
 
     }
 

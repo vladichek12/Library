@@ -17,24 +17,24 @@
     <link rel="stylesheet" href="css/bookRegistration.css">
 </div>
 <div class="title">
-    <h2>Book registration</h2>
+    <h2>Reader registration</h2>
 </div>
 
 <form action="${pageContext.request.contextPath}/reader-registration_servlet" method="post" class="registrationForm">
     <p>Reader surname:</p>
-    <input type = "text" name = "surname">
+    <input type = "text" name = "surname" required>
 
     <p>Reader name:</p>
-    <input type = "text" name = "name">
+    <input type = "text" name = "name" required>
 
     <p>Reader birthday:</p>
-    <input type = "date" name = "birthday">
+    <input type = "date" name = "birthday" required>
 
     <p>Reader email:</p>
-    <input type = "email" name = "email">
+    <input type = "email" name = "email" required>
 
     <p>Reader address:</p>
-    <input type = "text" name = "address">
+    <input type = "text" name = "address" required>
 
     <br />
     <input type = "submit" value = "Submit"  class = "submitButton"/>

@@ -9,20 +9,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Library</title>
+    <link rel="stylesheet" href="css/bookRegistration.css">
 </head>
 <body>
-<p>Reader:${reader.getName()} ${reader.getSurname()}</p>
-<p>Choose books from return</p>
-<form method="post" action="book-return">
-    <select id = "books" multiple = "multiple" name = "booksItems">
-        <c:forEach var ="element" items = "${books}">
-            <option value = ${element.getId()}>${element.getOriginalName()}</option>
-        </c:forEach>
-    </select>
-    <br>
-    <input type = "submit" value = "Submit" />
-</form>
+<div class="logo" >
+    <a href="book-list_servlet" ><img src="img/nE0DllVj_m.jpg"></a>
+</div>
+<br>
+<div class="registrationForm">
+
+    <form method="post" action="book-return">
+        <p>Reader:${reader.getName()} ${reader.getSurname()}</p>
+        <p>Choose books from return</p>
+        <select id = "books" multiple = "multiple" name = "booksItems" required>
+            <c:forEach var ="element" items = "${books}">
+                <option value = ${element.getId()}>${element.getOriginalName()}</option>
+            </c:forEach>
+        </select>
+        <br>
+        <input type = "submit" value = "Submit" class="submitButton"/>
+    </form>
+</div>
+
 
 </body>
 </html>

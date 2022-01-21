@@ -24,14 +24,25 @@ body{
     font-family: 'Montserrat', sans-serif;
 }
 
+.registrationForm h3{
+    text-align: center;
+    margin-left: 50%;
+    padding-left: 50%;
+}
 
 
-input,p,select,textarea{
+
+input,p,select,textarea,h3{
     margin-left: 15%;
 }
 
 input,select,textarea{
     width: 70%;
+}
+
+.sub-title{
+    padding-left: 15%;
+
 }
 
 .submitButton{
@@ -59,3 +70,4 @@ input,select,textarea{
     text-align: center;
     color: white;
 }
+

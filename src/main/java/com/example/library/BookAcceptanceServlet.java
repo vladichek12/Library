@@ -36,12 +36,15 @@ public class BookAcceptanceServlet extends HttpServlet {
         reader.setBirthday(LocalDate.parse(request.getParameter("birthday")));
         if(repository.isRegisteredReader(reader)){
             List<Book> books = repository.findBooksByReader(reader);
+            if(books.size() == 0){
+                request.getServletContext().getRequestDispatcher("/errorNullPointerBooksMessage.jsp").forward(request,response);
+            }
             request.setAttribute("books",books);
             request.setAttribute("reader", reader);
             request.getServletContext().getRequestDispatcher("/bookReturn.jsp").forward(request,response);
         }
         else{
-            //error message
+            request.getServletContext().getRequestDispatcher("/isNotRegisteredReader.jsp").forward(request,response);
         }
     }
 

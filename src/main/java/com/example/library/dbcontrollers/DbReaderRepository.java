@@ -189,11 +189,11 @@ public class DbReaderRepository implements ReaderRepository{
                 if(resultSet2.next()) {
                     pricePerDay = resultSet2.getDouble(7);
                 }
-                if((date.getTime()-currentDate.getTime())/(24 * 60 * 60 * 1000) <= 30) {
-                    sumToPay += discount * (pricePerDay * (date.getTime()-currentDate.getTime())/(24 * 60 * 60 * 1000));
+                if((date.getTime()>currentDate.getTime())) {
+                    sumToPay += discount * (pricePerDay * (currentDate.getTime() - Date.valueOf(date.toLocalDate().minusMonths(1)).getTime())/(24 * 60 * 60 * 1000));
                 }
                 else
-                    sumToPay+= discount * (pricePerDay*30)+ 0.01*(date.getTime()-currentDate.getTime())/(24 * 60 * 60 * 1000);
+                    sumToPay+= discount * (pricePerDay*30)+ 0.01*(currentDate.getTime()-date.getTime())/(24 * 60 * 60 * 1000);
 
                 int numberOfCopies = resultSet2.getInt(5);
                 PreparedStatement preparedStatement3 = worker.getConnection().prepareStatement(query3);

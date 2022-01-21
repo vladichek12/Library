@@ -19,8 +19,9 @@
 <br>
 
 <form method = "post" action="book-list_servlet" class="registrationForm">
-    <p>You have to pay : ${sum}</p>
+    <p>You don't have to return books</p>
     <input class="submitButton" type = "submit" value="Submit">
 </form>
 </body>
 </html>
+

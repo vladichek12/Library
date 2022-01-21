@@ -19,7 +19,7 @@
 <br>
 
 <form method = "post" action="book-list_servlet" class="registrationForm">
-    <p>You have to pay : ${sum}</p>
+    <p>This reader is debtor</p>
     <input class="submitButton" type = "submit" value="Submit">
 </form>
 </body>
