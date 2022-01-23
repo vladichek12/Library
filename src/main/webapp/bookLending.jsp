@@ -11,6 +11,7 @@
 <head>
     <title>Library</title>
     <link rel="stylesheet" href="css/bookRegistration.css">
+    <script src="js/multipleChoiseLimiter.js"></script>
 </head>
 <body>
 <div class="logo" >
@@ -41,13 +42,13 @@
 
 
         <p>choose books from lending</p>
-        <select id = "books" multiple = "multiple" name = "booksItems" required>
+        <select id = "books" multiple = "multiple"  name = "booksItems" required>
             <c:forEach var ="element" items = "${lendingBooks}">
-                <option value = ${element.getId()}>${element.getOriginalName()}</option>
+                <option  value = ${element.getId()} >${element.getOriginalName()}</option>
             </c:forEach>
         </select>
         <br>
-        <input type = "submit" value = "Submit"  class="submitButton"/>
+        <input type = "submit" value = "Submit" onclick="multipleChoiseLimiter()"  class="submitButton"/>
     </form>
 </div>
 

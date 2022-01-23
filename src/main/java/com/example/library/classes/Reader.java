@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Reader {
+    private Long id;
     private String surname;
     private String name;
     private LocalDate birthday;
@@ -27,6 +28,14 @@ public class Reader {
         this.birthday = birthday;
         this.email = email;
         this.address = address;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getSurname() {

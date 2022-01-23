@@ -5,6 +5,7 @@
 <head>
     <title>Library</title>
     <link rel="stylesheet" href="css/index.css">
+    <script src="js/sort.js"></script>
 </head>
 <body>
 <div class="logo" >
@@ -24,14 +25,16 @@
 <hr>
 
 <div class="books">
-    <table>
+    <table id = "sortable">
         <tr>
-            <td>Russian title</td>
+            <td >Russian title</td>
             <td>Genres</td>
             <td>Registration date</td>
             <td>Number of available copies</td>
         </tr>
+        <tbody>
         <c:forEach var ="element" items = "${books}">
+
             <tr>
                 <td>${element.getRussianName()}</td>
                 <td>
@@ -43,6 +46,7 @@
                 <td>${element.getNumberOfCopies()}</td>
             </tr>
         </c:forEach>
+        </tbody>
     </table>
 
 </div>

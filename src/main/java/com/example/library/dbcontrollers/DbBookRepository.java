@@ -60,14 +60,11 @@ public class DbBookRepository implements BookRepository{
     @Override
     public void add(Book book) {
         DBWorker worker = new DBWorker();
-
-
         try {
 
             //запись информации о книге
             String query = "insert into books (id,russianName,originalName,price,numberOfCopies,coverPhoto,priceperday,registrationdate) values(?,?,?,?,?,?,?,?)";
             PreparedStatement statement = worker.getConnection().prepareStatement(query);
-            //statement.setInt(1,statement.g);
             statement.setInt(1, book.hashCode()/100);
             statement.setString(2, book.getRussianName());
             statement.setString(3, book.getOriginalName());
@@ -98,9 +95,9 @@ public class DbBookRepository implements BookRepository{
                 }
             }
 
-
+            //добавить в базу авторов если это надо
             String queryAuthorBooks = "insert into booksauthors (id,bookid,authorid) values (?,?,?)";
-            String authorsAddQuery = "insert into authors (id,name,surname) values (?,?,null)";//запись новых авторов
+            String authorsAddQuery = "insert into authors (id,name) values (?,?)";//запись новых авторов
             PreparedStatement statement2 = worker.getConnection().prepareStatement(authorsAddQuery);
             PreparedStatement statement3 = worker.getConnection().prepareStatement(queryAuthorBooks);
             for(String author : authors){
@@ -111,21 +108,14 @@ public class DbBookRepository implements BookRepository{
                 statement3.setInt(3,hash(author)/100);
                 statement2.executeUpdate();
                 statement3.executeUpdate();
-                //authorId++;
-                //bookAuthorId++;
+
             }
             for(Integer id : ids){
                 statement3.setInt(1,book.hashCode()/100 + id);
                 statement3.setInt(2,book.hashCode()/100);
                 statement3.setInt(3,id);
                 statement3.executeUpdate();
-                //authorId++;
-               // bookAuthorId++;
             }
-            //statement2.executeUpdate();
-           // statement3.executeUpdate();
-
-
 
             //связь книги с жанрами
             String retrieveGenresIdQuery = "select * from genres";
@@ -139,6 +129,7 @@ public class DbBookRepository implements BookRepository{
                     }
                 }
             }
+            //указать жанры
             String bookGenresQuery = "insert into booksgenres(id,bookid,genreid) values (?,?,?)";
             PreparedStatement statement5 = worker.getConnection().prepareStatement(bookGenresQuery);
             for(Integer id : genreIds){
@@ -148,39 +139,9 @@ public class DbBookRepository implements BookRepository{
                 statement5.executeUpdate();
             }
 
-
-
-            //bookId++;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public List<Book> findById(List<String> ids) {
-        List<Book> books = new ArrayList<>();
-        DBWorker worker = new DBWorker();
-        String query = "select * from books";
-        try {
-            Statement statement  = worker.getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()){
-                Book book = new Book();
-                book.setId(resultSet.getLong(1));
-                book.setRussianName(resultSet.getString(2));
-                book.setOriginalName(resultSet.getString(3));
-                book.setPrice(resultSet.getDouble(4));
-                book.setNumberOfCopies(resultSet.getInt(5));
-                book.setCoverPhoto(resultSet.getString(6));
-                book.setPricePerDay(resultSet.getDouble(7));
-                book.setRegistrationDate(LocalDate.parse(resultSet.getString(8)));
-                if(ids.contains(book.getId()))
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return books;
     }
 
 }

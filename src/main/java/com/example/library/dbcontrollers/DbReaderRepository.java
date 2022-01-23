@@ -22,6 +22,7 @@ public class DbReaderRepository implements ReaderRepository{
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()){
                 Reader reader = new Reader();
+                reader.setId(resultSet.getLong(1));
                 reader.setSurname(resultSet.getString(2));
                 reader.setName(resultSet.getString(3));
                 reader.setBirthday((LocalDate.parse(resultSet.getString(4))));
@@ -60,8 +61,10 @@ public class DbReaderRepository implements ReaderRepository{
     public boolean isRegisteredReader(Reader reader) {
         List<Reader> readers= findAll();
         for(Reader tempReader : readers){
-            if(reader.equals(tempReader))
+            if(reader.equals(tempReader)) {
+                reader.setId(tempReader.getId());
                 return true;
+            }
         }
         return false;
     }
@@ -99,60 +102,40 @@ public class DbReaderRepository implements ReaderRepository{
         else if(books.size()>5){
             discountSize= 0.85;
         }
+
         DBWorker worker = new DBWorker();
         try {
+            //проверка на возможность выдачи выбранных книг
         List<Long> ids = new ArrayList<>();
-        List<Integer> numberOfCopies = new ArrayList<>();
-        String query = "select * from books";
-        Statement statement  = worker.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-
-        while (resultSet.next()){
-            for(String book : books){//найти книги которые выдать юзеру
-                if((resultSet.getLong(1)) == Long.parseLong(book)&& resultSet.getInt(5)>0) {
-                    ids.add(resultSet.getLong(1));
-                    numberOfCopies.add(resultSet.getInt(5));
-                }
-            }
+        for(String book : books){
+            String query = "select id from books where id = " + book + " and numberofcopies > 0";
+            Statement statement  = worker.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            resultSet.next();
+            ids.add(resultSet.getLong(1));
         }
-      /*  for(int i = 0;i < numberOfCopies.size();i++){
-            int a = numberOfCopies.get(i);
-            a--;
-            numberOfCopies.add(i,a);
-            numberOfCopies[i]--;
-        }*/
-        String updateQuery = "update books set numberOfCopies = ? where id = ?";
+        //уменьшение количества экземпляров выданных книг
+        String updateQuery = "update books set numberofcopies = numberofcopies-1 where id = ?";
         PreparedStatement updatePreparedStatement = worker.getConnection().prepareStatement(updateQuery);
         for(int i = 0;i < ids.size();i++){
-            updatePreparedStatement.setLong(2,ids.get(i));
-            updatePreparedStatement.setInt(1,numberOfCopies.get(i)-1);
+            updatePreparedStatement.setLong(1,ids.get(i));
             updatePreparedStatement.executeUpdate();
         }
 
-
-        //найти ридера
-            int readerId = 0;
-            String query2 = "select * from readers";
-            Statement statement2  = worker.getConnection().createStatement();
-            ResultSet resultSet2 = statement2.executeQuery(query2);
-           while (resultSet2.next()){
-               if(resultSet2.getString(5).equals(reader.getEmail()))
-               readerId = resultSet2.getInt(1);
-           }
-
         //записать что книги выданы
-            LocalDate date = LocalDate.now().plusMonths(1);
+        LocalDate date = LocalDate.now().plusMonths(1);
+        String query1 = "insert into bookCopies(id,bookid,readerid,condition,discountSize,returnDate) values (?,?,?,1,?,?)";
+        PreparedStatement preparedStatement1 = worker.getConnection().prepareStatement(query1);
+        for(Long i :ids){
+            preparedStatement1.setLong(1, i + reader.getId());
+            preparedStatement1.setLong(2,i);
+            preparedStatement1.setLong(3,reader.getId());
+            preparedStatement1.setDouble(4,discountSize);
+            preparedStatement1.setDate(5, Date.valueOf(date));
+            preparedStatement1.executeUpdate();
+        }
 
-            String query1 = "insert into bookCopies(id,bookid,readerid,condition,discountSize,returnDate) values (?,?,?,1,?,?)";
-            PreparedStatement preparedStatement1 = worker.getConnection().prepareStatement(query1);
-           for(Long i :ids){
-               preparedStatement1.setLong(1, i + readerId);
-               preparedStatement1.setLong(2,i);
-               preparedStatement1.setInt(3,readerId);
-               preparedStatement1.setDouble(4,discountSize);
-               preparedStatement1.setDate(5, Date.valueOf(date));
-               preparedStatement1.executeUpdate();
-           }
+
 
 
         } catch (SQLException e) {
@@ -172,7 +155,7 @@ public class DbReaderRepository implements ReaderRepository{
         LocalDate buf = LocalDate.now();
         Date currentDate = Date.valueOf(buf);
 
-        String query3 = "update books set numberofcopies = ? where id = ?";
+        String query3 = "update books set numberofcopies = numberofcopies + 1 where id = ?";
         String query4 = "update bookcopies set delete = true where bookid = ?";
         try {
             for(String id : books) {
@@ -197,8 +180,7 @@ public class DbReaderRepository implements ReaderRepository{
 
                 int numberOfCopies = resultSet2.getInt(5);
                 PreparedStatement preparedStatement3 = worker.getConnection().prepareStatement(query3);
-                preparedStatement3.setInt(1,numberOfCopies+1);
-                preparedStatement3.setLong(2,Long.parseLong(id));
+                preparedStatement3.setLong(1,Long.parseLong(id));
                 PreparedStatement preparedStatement4 = worker.getConnection().prepareStatement(query4);
                 preparedStatement4.setLong(1,Long.parseLong(id));
                 preparedStatement3.executeUpdate();
